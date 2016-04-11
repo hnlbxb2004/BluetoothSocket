@@ -38,6 +38,7 @@ public class BlueDataThread extends BlueSocketBaseThread {
         } catch (IOException e) {
             e.printStackTrace();
             sendMessage(BlueSocketStatus.DISCONNECTION);
+            return;
         }
         //监听通道后,死循环监听通道,去读取message ,
         while (isRunning) {
