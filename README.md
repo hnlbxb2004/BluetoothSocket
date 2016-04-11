@@ -39,6 +39,11 @@ mHelper.connect(mBluetoothDevice);
 
 ```
 
+
+###需要注意
+Client 连接前需要确保改设备应配对完成
+
+
 ## License
 The MIT License (MIT) Copyright (c) 2016 hnlbxb2004
 
