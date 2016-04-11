@@ -9,7 +9,7 @@ import android.os.Message;
  * @author bingbing
  * @date 16/4/6
  */
-public class BluetoothSppHelper {
+public class BluetoothSocketHelper {
 
 
     private BlueSocketBaseThread mTargThread;
@@ -19,7 +19,7 @@ public class BluetoothSppHelper {
 
 
 
-    public BluetoothSppHelper() {
+    public BluetoothSocketHelper() {
     }
 
     /**

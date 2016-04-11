@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xloong.library.bluesocket.BlueSocketBaseThread;
-import com.xloong.library.bluesocket.BluetoothSppHelper;
+import com.xloong.library.bluesocket.BluetoothSocketHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +27,12 @@ import java.util.List;
  * @author bingbing
  * @date 16/4/7
  */
-public class ClientActivity extends Activity implements BluetoothSppHelper.BlueSocketListener, AdapterView.OnItemClickListener {
+public class ClientActivity extends Activity implements BluetoothSocketHelper.BlueSocketListener, AdapterView.OnItemClickListener {
 
     private EditText mEdit;
     private TextView mConnectionStatus;
     private ListView mList;
-    private BluetoothSppHelper mHelper;
+    private BluetoothSocketHelper mHelper;
     private List<BluetoothDevice> devices = new ArrayList<>();
     private BaseAdapter mBlueAdapter;
 
@@ -43,7 +43,7 @@ public class ClientActivity extends Activity implements BluetoothSppHelper.BlueS
         mEdit = (EditText) findViewById(R.id.edit);
         mList = (ListView) findViewById(R.id.list);
         mConnectionStatus = (TextView) findViewById(R.id.text);
-        mHelper = new BluetoothSppHelper();
+        mHelper = new BluetoothSocketHelper();
         mHelper.setBlueSocketListener(this);
         devices.addAll(BluetoothAdapter.getDefaultAdapter().getBondedDevices());
         mBlueAdapter = new MyAdapter();

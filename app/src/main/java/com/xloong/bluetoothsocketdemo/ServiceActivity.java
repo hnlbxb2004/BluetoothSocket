@@ -9,16 +9,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xloong.library.bluesocket.BlueSocketBaseThread;
-import com.xloong.library.bluesocket.BluetoothSppHelper;
+import com.xloong.library.bluesocket.BluetoothSocketHelper;
 
 /**
  * @author bingbing
  * @date 16/4/7
  */
-public class ServiceActivity extends Activity implements BluetoothSppHelper.BlueSocketListener {
+public class ServiceActivity extends Activity implements BluetoothSocketHelper.BlueSocketListener {
 
     private EditText mEdit;
-    private BluetoothSppHelper mHelper;
+    private BluetoothSocketHelper mHelper;
     private TextView mStatus;
 
     @Override
@@ -27,7 +27,7 @@ public class ServiceActivity extends Activity implements BluetoothSppHelper.Blue
         setContentView(R.layout.activity_service);
         mEdit = (EditText) findViewById(R.id.edit);
         mStatus = (TextView) findViewById(R.id.text);
-        mHelper = new BluetoothSppHelper();
+        mHelper = new BluetoothSocketHelper();
         mHelper.setBlueSocketListener(this);
         mHelper.strat();
     }
