@@ -20,11 +20,6 @@ public class BlueServiceThread extends BlueSocketBaseThread {
 
     public BlueServiceThread(Handler handler) {
         super(handler);
-        try {
-            mBlueServiceSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME_SECURE, UUID_ANDROID_DEVICE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -38,6 +33,7 @@ public class BlueServiceThread extends BlueSocketBaseThread {
         if (!isRunning) return;
 
         try {
+            mBlueServiceSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME_SECURE, UUID_ANDROID_DEVICE);
             sendMessage(BlueSocketStatus.LISTENING);
             //监听连接,等待客户端连接,此处会阻塞线程,如果客户端没有连接服务端,此处一直会等待,知道有设备连接
             mBlueSocket = mBlueServiceSocket.accept();
