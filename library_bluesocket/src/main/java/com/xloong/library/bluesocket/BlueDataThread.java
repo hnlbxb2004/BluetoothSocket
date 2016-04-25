@@ -48,6 +48,7 @@ public class BlueDataThread extends BlueSocketBaseThread {
             } catch (IOException e) {
                 e.printStackTrace();
                 sendMessage(BlueSocketStatus.DISCONNECTION);
+                return;
             }
 
         }
