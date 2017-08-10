@@ -18,9 +18,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
-        android:text="send"
-        android:onClick="send"
-        android:id="@+id/send"
+        android:text="发送文字"
+        android:onClick="sendText"
+        android:id="@+id/sendText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:text="发送图片"
+        android:onClick="sendImage"
+        android:id="@+id/sendImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <ListView

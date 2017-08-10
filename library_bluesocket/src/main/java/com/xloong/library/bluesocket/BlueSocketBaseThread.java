@@ -12,10 +12,10 @@ import java.util.UUID;
  */
 public abstract class BlueSocketBaseThread extends Thread {
 
-    public static final String NAME_SECURE = "Bluetooth Secure";
+    protected final String TAG = this.getClass().getSimpleName();
+    public static final String NAME_SECURE = "XLOONG Bluetooth";
 
     public static final UUID UUID_ANDROID_DEVICE = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
-    public static final UUID UUID_OTHER_DEVICE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     public enum BlueSocketStatus {
 
@@ -57,18 +57,17 @@ public abstract class BlueSocketBaseThread extends Thread {
      * 取消当前线程,释放内存
      */
     public void cancle() {
-        mHandler = null;
         isRunning = false;
         mBluetoothAdapter = null;
     }
 
     public void sendMessage(BlueSocketStatus status) {
-        if (mHandler != null)
+        if (mHandler != null && isRunning)
             mHandler.obtainMessage(status.ordinal()).sendToTarget();
     }
 
     public void sendMessage(BlueSocketStatus status, Object object) {
-        if (mHandler != null)
+        if (mHandler != null && isRunning)
             mHandler.obtainMessage(status.ordinal(), object).sendToTarget();
     }
 

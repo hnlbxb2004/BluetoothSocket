@@ -9,16 +9,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xloong.library.bluesocket.BlueSocketBaseThread;
-import com.xloong.library.bluesocket.BluetoothSocketHelper;
+import com.xloong.library.bluesocket.BluetoothSppHelper;
+import com.xloong.library.bluesocket.message.IMessage;
+import com.xloong.library.bluesocket.message.ImageMessage;
+import com.xloong.library.bluesocket.message.StringMessage;
 
 /**
  * @author bingbing
  * @date 16/4/7
  */
-public class ServiceActivity extends Activity implements BluetoothSocketHelper.BlueSocketListener {
+public class ServiceActivity extends Activity implements BluetoothSppHelper.BlueSocketListener {
 
     private EditText mEdit;
-    private BluetoothSocketHelper mHelper;
+    private BluetoothSppHelper mHelper;
     private TextView mStatus;
 
     @Override
@@ -27,15 +30,11 @@ public class ServiceActivity extends Activity implements BluetoothSocketHelper.B
         setContentView(R.layout.activity_service);
         mEdit = (EditText) findViewById(R.id.edit);
         mStatus = (TextView) findViewById(R.id.text);
-        mHelper = new BluetoothSocketHelper();
+        mHelper = new BluetoothSppHelper();
         mHelper.setBlueSocketListener(this);
         mHelper.strat();
     }
 
-
-    public void send(View view){
-        mHelper.write(mEdit.getText().toString());
-    }
 
     @Override
     public void onBlueSocketStatusChange(BlueSocketBaseThread.BlueSocketStatus status, BluetoothDevice remoutDevice) {
@@ -43,13 +42,29 @@ public class ServiceActivity extends Activity implements BluetoothSocketHelper.B
     }
 
     @Override
-    public void onBlueSocketMessageReceiver(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    public void onBlueSocketMessageReceiver(IMessage message) {
+        if (message instanceof StringMessage){
+            Toast.makeText(this, ((StringMessage)message).getContent(), Toast.LENGTH_SHORT).show();
+        }else if (message instanceof ImageMessage){
+            Toast.makeText(this, ((ImageMessage)message).getContent().getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mHelper.stop();
+    }
+
+    public void sendText(View view) {
+//        mHelper.write(mEdit.getText().toString());
+        StringMessage message = new StringMessage();
+        message.setContent("我是Service内容","扩展信息");
+        mHelper.write(message);
+
+    }
+
+    public void sendImage(View view) {
+
     }
 }

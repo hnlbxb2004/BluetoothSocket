@@ -18,7 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xloong.library.bluesocket.BlueSocketBaseThread;
-import com.xloong.library.bluesocket.BluetoothSocketHelper;
+import com.xloong.library.bluesocket.BluetoothSppHelper;
+import com.xloong.library.bluesocket.message.IMessage;
+import com.xloong.library.bluesocket.message.ImageMessage;
+import com.xloong.library.bluesocket.message.StringMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +30,12 @@ import java.util.List;
  * @author bingbing
  * @date 16/4/7
  */
-public class ClientActivity extends Activity implements BluetoothSocketHelper.BlueSocketListener, AdapterView.OnItemClickListener {
+public class ClientActivity extends Activity implements BluetoothSppHelper.BlueSocketListener, AdapterView.OnItemClickListener {
 
     private EditText mEdit;
     private TextView mConnectionStatus;
     private ListView mList;
-    private BluetoothSocketHelper mHelper;
+    private BluetoothSppHelper mHelper;
     private List<BluetoothDevice> devices = new ArrayList<>();
     private BaseAdapter mBlueAdapter;
 
@@ -43,7 +46,7 @@ public class ClientActivity extends Activity implements BluetoothSocketHelper.Bl
         mEdit = (EditText) findViewById(R.id.edit);
         mList = (ListView) findViewById(R.id.list);
         mConnectionStatus = (TextView) findViewById(R.id.text);
-        mHelper = new BluetoothSocketHelper();
+        mHelper = new BluetoothSppHelper();
         mHelper.setBlueSocketListener(this);
         devices.addAll(BluetoothAdapter.getDefaultAdapter().getBondedDevices());
         mBlueAdapter = new MyAdapter();
@@ -60,17 +63,33 @@ public class ClientActivity extends Activity implements BluetoothSocketHelper.Bl
     }
 
     public void send(View view) {
-        mHelper.write(mEdit.getText().toString());
+//        mHelper.write(mEdit.getText().toString());
     }
 
+
+    public void sendText(View view) {
+        StringMessage message = new StringMessage();
+        message.setContent("我是Client内容","扩展信息");
+        mHelper.write(message);
+    }
+
+    public void sendImage(View view) {
+    }
+
+
     @Override
-    public void onBlueSocketStatusChange(BlueSocketBaseThread.BlueSocketStatus status,BluetoothDevice device) {
+    public void onBlueSocketStatusChange(BlueSocketBaseThread.BlueSocketStatus status, BluetoothDevice device) {
         mConnectionStatus.setText(status.toString());
     }
 
     @Override
-    public void onBlueSocketMessageReceiver(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void onBlueSocketMessageReceiver(IMessage message) {
+        if (message instanceof StringMessage){
+            Toast.makeText(this, ((StringMessage)message).getContent(), Toast.LENGTH_SHORT).show();
+        }else if (message instanceof ImageMessage){
+            Toast.makeText(this, ((ImageMessage)message).getContent().getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
@@ -94,6 +113,7 @@ public class ClientActivity extends Activity implements BluetoothSocketHelper.Bl
         BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
         mHelper.connect(devices.get(position));
     }
+
 
     private class MyAdapter extends BaseAdapter {
 

@@ -16,7 +16,7 @@ public class BlueClientThread extends BlueSocketBaseThread {
     private BluetoothDevice mServiceDevice;
     private BluetoothSocket mBlueSocket;
 
-    protected BlueClientThread(BluetoothDevice serviceDevice, Handler handler) {
+    public BlueClientThread(BluetoothDevice serviceDevice, Handler handler) {
         super(handler);
         mServiceDevice = serviceDevice;
     }
@@ -32,7 +32,6 @@ public class BlueClientThread extends BlueSocketBaseThread {
             mBlueSocket.connect();
             sendMessage(BlueSocketStatus.ACCEPTED);
         } catch (IOException e) {
-//            e.printStackTrace();
             sendMessage(BlueSocketStatus.DISCONNECTION);
         }
     }
