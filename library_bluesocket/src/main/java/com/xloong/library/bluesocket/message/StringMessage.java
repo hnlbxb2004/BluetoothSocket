@@ -8,6 +8,7 @@ import com.xloong.library.bluesocket.utils.TypeUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 /**
  * Created by xubingbing on 2017/8/10.
@@ -127,4 +128,15 @@ public class StringMessage implements IMessage<String> {
             return new StringMessage[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "StringMessage{" +
+                "mContent='" + mContent + '\'' +
+                ", contentByte=" + Arrays.toString(contentByte) +
+                ", mExtend='" + mExtend + '\'' +
+                ", mLength=" + mLength +
+                ", mType=" + mType +
+                '}';
+    }
 }

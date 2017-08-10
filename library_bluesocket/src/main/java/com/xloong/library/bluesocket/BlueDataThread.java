@@ -54,9 +54,12 @@ public class BlueDataThread extends BlueSocketBaseThread {
         while (isRunning) {
             try {
                 IMessage message = TypeUtils.readHeader(mBlueSocketInputStream);
-                message.parseContent(mBlueSocketInputStream);
-                sendMessage(BlueSocketStatus.MESSAGERECEIVE, message);
-            } catch (IOException e) {
+                if (message != null){
+                    message.parseContent(mBlueSocketInputStream);
+                    sendMessage(BlueSocketStatus.MESSAGERECEIVE, message);
+                    Log.d("BLUE","完成");
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
                 sendMessage(BlueSocketStatus.DISCONNECTION);
                 return;
@@ -69,7 +72,7 @@ public class BlueDataThread extends BlueSocketBaseThread {
     /**
      * 开始消息队列
      */
-    public void startQueue() {
+    public synchronized void startQueue() {
         if (mQueue != null && !mQueue.isEmpty() && isSendFinish) {
             if (mSendThread != null) {
                 mSendThread.cancle();

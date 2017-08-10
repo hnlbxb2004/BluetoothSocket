@@ -23,6 +23,7 @@ import com.xloong.library.bluesocket.message.IMessage;
 import com.xloong.library.bluesocket.message.ImageMessage;
 import com.xloong.library.bluesocket.message.StringMessage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ import java.util.List;
  * @author bingbing
  * @date 16/4/7
  */
-public class ClientActivity extends Activity implements BluetoothSppHelper.BlueSocketListener, AdapterView.OnItemClickListener {
+public class ClientActivity extends BaseActivity implements BluetoothSppHelper.BlueSocketListener, AdapterView.OnItemClickListener {
 
     private EditText mEdit;
     private TextView mConnectionStatus;
@@ -74,6 +75,7 @@ public class ClientActivity extends Activity implements BluetoothSppHelper.BlueS
     }
 
     public void sendImage(View view) {
+        chooseImage();
     }
 
 
@@ -112,6 +114,14 @@ public class ClientActivity extends Activity implements BluetoothSppHelper.BlueS
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
         mHelper.connect(devices.get(position));
+    }
+
+    @Override
+    public void onChooseImage(String path) {
+        File file = new File(path);
+        ImageMessage message = new ImageMessage();
+        message.setContent(new File(path),file.getName());
+        mHelper.write(message);
     }
 
 

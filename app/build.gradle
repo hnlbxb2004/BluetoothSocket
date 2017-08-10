@@ -23,5 +23,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.jaikydota.imagespickers:imagespickers:1.0.6'
+
+    //如果使用图片加载框架，添加依赖，下面用Glide示例
+    compile 'com.github.bumptech.glide:glide:3.6.1'
     compile project(':library_bluesocket')
 }

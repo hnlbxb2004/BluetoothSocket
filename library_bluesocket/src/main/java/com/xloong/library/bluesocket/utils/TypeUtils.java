@@ -43,9 +43,14 @@ public class TypeUtils {
         ArrayList<Integer> arrayList = new ArrayList<>();
         while (true) {
             int data = inputStream.read();
+            Log.d("BLUE","data:"+data + "");
             if (data == 0x0A) {   //\r  不增加
-                Log.d("readHeader","sss");
+                Log.d("readHeader", "sss");
             } else if (data == 0x0D) { //\n
+                if (arrayList.size() < 10) {
+                    arrayList.clear();
+                    continue;
+                }
                 byte[] buffer = new byte[arrayList.size()];
                 for (int i = 0; i < arrayList.size(); i++) {
                     buffer[i] = arrayList.get(i).byteValue();
@@ -53,6 +58,7 @@ public class TypeUtils {
 
                 IMessage iMessage = parseHeader(buffer);
                 if (iMessage != null) {
+                    Log.d("message",iMessage.toString());
                     return iMessage;
                 } else {
                     arrayList.clear();

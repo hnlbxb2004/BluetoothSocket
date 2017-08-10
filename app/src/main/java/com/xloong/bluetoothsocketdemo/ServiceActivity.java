@@ -14,11 +14,13 @@ import com.xloong.library.bluesocket.message.IMessage;
 import com.xloong.library.bluesocket.message.ImageMessage;
 import com.xloong.library.bluesocket.message.StringMessage;
 
+import java.io.File;
+
 /**
  * @author bingbing
  * @date 16/4/7
  */
-public class ServiceActivity extends Activity implements BluetoothSppHelper.BlueSocketListener {
+public class ServiceActivity extends BaseActivity implements BluetoothSppHelper.BlueSocketListener {
 
     private EditText mEdit;
     private BluetoothSppHelper mHelper;
@@ -57,7 +59,6 @@ public class ServiceActivity extends Activity implements BluetoothSppHelper.Blue
     }
 
     public void sendText(View view) {
-//        mHelper.write(mEdit.getText().toString());
         StringMessage message = new StringMessage();
         message.setContent("我是Service内容","扩展信息");
         mHelper.write(message);
@@ -65,6 +66,14 @@ public class ServiceActivity extends Activity implements BluetoothSppHelper.Blue
     }
 
     public void sendImage(View view) {
+        chooseImage();
+    }
 
+    @Override
+    public void onChooseImage(String path) {
+        File file = new File(path);
+        ImageMessage message = new ImageMessage();
+        message.setContent(file,file.getName());
+        mHelper.write(message);
     }
 }

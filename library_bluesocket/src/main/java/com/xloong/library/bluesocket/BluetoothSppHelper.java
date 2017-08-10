@@ -66,6 +66,8 @@ public class BluetoothSppHelper {
 
 
     public synchronized boolean write(IMessage message) {
+        message.toString();
+
         if (mNowStatus == BlueSocketBaseThread.BlueSocketStatus.CONNEDTIONED) {
             synchronized (BluetoothSppHelper.class) {
                 if (mNowStatus == BlueSocketBaseThread.BlueSocketStatus.CONNEDTIONED) {

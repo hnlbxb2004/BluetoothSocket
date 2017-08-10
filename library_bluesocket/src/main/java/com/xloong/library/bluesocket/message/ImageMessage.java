@@ -6,6 +6,8 @@ import android.os.Parcel;
 import com.xloong.library.bluesocket.utils.TypeUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +52,7 @@ public class ImageMessage implements IMessage<File> {
 
     @Override
     public File getContent() {
-        return null;
+        return mContent;
     }
 
     @Override
@@ -59,37 +61,49 @@ public class ImageMessage implements IMessage<File> {
     }
 
 
-
     @Override
     public void setContent(File content, String extend) {
         mContent = content;
         mExtend = extend;
-        mLength = mContent.length();
+        try {
+            FileInputStream fio = new FileInputStream(mContent);
+            mLength = fio.available();
+            fio.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void parseContent(InputStream inputStream) throws IOException {
         mContent = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES), mExtend);
 
+        if (!mContent.getParentFile().exists()) {
+            mContent.getParentFile().mkdirs();
+        }
         if (mContent.exists()) {
             mContent.createNewFile();
         }
         FileOutputStream fos = new FileOutputStream(mContent);
-        long tempLength = 0;
 
+
+        long tempLength = 0;
         byte[] buffer = null;
         while (tempLength < mLength) {
-            if (mLength - tempLength < 1024 * 1024 * 2) {
+            if (mLength - tempLength < (1024 * 64)) {
                 buffer = new byte[(int) (mLength - tempLength)];
             } else {
                 if (buffer == null)
-                    buffer = new byte[1024 * 1024 * 2];
+                    buffer = new byte[1024 * 64];
             }
-            inputStream.read(buffer);
-            fos.write(buffer);
-            fos.flush();
-            tempLength += buffer.length;
+            int readLength = inputStream.read(buffer, 0, buffer.length);
+            fos.write(buffer, 0, readLength);
+            tempLength += readLength;
         }
+
         fos.close();
     }
 
@@ -100,14 +114,19 @@ public class ImageMessage implements IMessage<File> {
         outputStream.write(0xA);
         outputStream.write(0xD);
 
-        mContent = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES), mExtend);
+        FileInputStream fio = new FileInputStream(mContent);
 
-        if (mContent.exists()) {
-            mContent.createNewFile();
+
+        byte[] buffer = new byte[64 * 1024];
+        int length = 0;
+        int temp = 0;
+        while ((length = fio.read(buffer)) >= 0) {
+            outputStream.write(buffer, 0, length);
+            outputStream.flush();
+            temp += length;
         }
-        FileOutputStream fos = new FileOutputStream(mContent);
 
-
+//        Log.d("writeContent:" ," 写完:" +temp);
     }
 
     @Override
@@ -153,4 +172,14 @@ public class ImageMessage implements IMessage<File> {
             return new ImageMessage[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "ImageMessage{" +
+                "mContent=" + mContent +
+                ", mExtend='" + mExtend + '\'' +
+                ", mLength=" + mLength +
+                ", mType=" + mType +
+                '}';
+    }
 }
