@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application>
-
+            <service android:name=".BlueService"/>
     </application>
 
 </manifest>

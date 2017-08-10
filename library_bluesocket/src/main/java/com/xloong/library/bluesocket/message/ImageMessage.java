@@ -119,14 +119,11 @@ public class ImageMessage implements IMessage<File> {
 
         byte[] buffer = new byte[64 * 1024];
         int length = 0;
-        int temp = 0;
         while ((length = fio.read(buffer)) >= 0) {
             outputStream.write(buffer, 0, length);
             outputStream.flush();
-            temp += length;
         }
 
-//        Log.d("writeContent:" ," 写完:" +temp);
     }
 
     @Override
